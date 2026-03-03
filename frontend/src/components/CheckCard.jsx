@@ -34,7 +34,7 @@ function CheckCard({ check }) {
   }
 
   return (
-    <div className="bg-dark-card border border-dark-border rounded-xl overflow-hidden">
+    <div className="bg-sp-card border border-sp-border rounded-xl overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-full px-5 py-4 flex items-center justify-between hover:bg-white/[0.02] transition-colors"
@@ -46,7 +46,7 @@ function CheckCard({ check }) {
         <div className="flex items-center gap-3">
           <StatusBadge status={check.status} />
           <svg
-            className={`w-4 h-4 text-muted transition-transform ${expanded ? 'rotate-180' : ''}`}
+            className={`w-4 h-4 text-sp-text transition-transform ${expanded ? 'rotate-180' : ''}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -56,8 +56,8 @@ function CheckCard({ check }) {
         </div>
       </button>
       {expanded && (
-        <div className="px-5 pb-4 border-t border-dark-border">
-          <p className="text-muted text-sm pt-3 leading-relaxed">{check.detail}</p>
+        <div className="px-5 pb-4 border-t border-sp-border">
+          <p className="text-sp-text text-sm pt-3 leading-relaxed">{check.detail}</p>
         </div>
       )}
     </div>

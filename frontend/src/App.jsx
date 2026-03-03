@@ -8,9 +8,9 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 function App() {
   return (
-    <div className="min-h-screen bg-dark-bg text-white">
+    <div className="min-h-screen sp-hero-bg text-sp-text">
       <Navbar />
-      <main className="max-w-5xl mx-auto px-4 py-8">
+      <main className="max-w-5xl mx-auto px-4 pb-16">
         <Routes>
           <Route path="/" element={<Home apiUrl={API_URL} />} />
           <Route path="/results/:id" element={<Results apiUrl={API_URL} />} />

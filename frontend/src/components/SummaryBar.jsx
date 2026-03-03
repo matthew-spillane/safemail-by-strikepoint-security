@@ -11,10 +11,10 @@ function SummaryBar({ summary }) {
       {items.map((item) => (
         <div
           key={item.label}
-          className="bg-dark-card border border-dark-border rounded-xl px-4 py-3 text-center"
+          className="bg-sp-card border border-sp-border rounded-xl px-4 py-3 text-center"
         >
           <div className={`text-2xl font-bold ${item.color}`}>{item.count}</div>
-          <div className="text-xs text-muted mt-1">{item.label}</div>
+          <div className="text-xs text-sp-text mt-1">{item.label}</div>
         </div>
       ))}
     </div>

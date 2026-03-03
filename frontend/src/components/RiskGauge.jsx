@@ -37,7 +37,7 @@ function RiskGauge({ score, verdict }) {
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-3xl font-bold text-white">{score}</span>
-          <span className="text-xs text-muted">/100</span>
+          <span className="text-xs text-sp-text">/100</span>
         </div>
       </div>
       <span

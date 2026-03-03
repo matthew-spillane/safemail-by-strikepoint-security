@@ -44,8 +44,8 @@ function FileUpload({ onUpload, isLoading }) {
       <div
         className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all ${
           dragActive
-            ? 'border-accent bg-accent/5'
-            : 'border-dark-border hover:border-muted/50'
+            ? 'border-sp-red bg-sp-red/5'
+            : 'border-sp-border hover:border-sp-text/50'
         }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
@@ -61,20 +61,20 @@ function FileUpload({ onUpload, isLoading }) {
           className="hidden"
         />
         <div className="space-y-3">
-          <div className="mx-auto w-12 h-12 rounded-full bg-dark-card border border-dark-border flex items-center justify-center">
-            <svg className="w-6 h-6 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="mx-auto w-12 h-12 rounded-full bg-sp-card border border-sp-border flex items-center justify-center">
+            <svg className="w-6 h-6 text-sp-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
             </svg>
           </div>
           {selectedFile ? (
             <div>
               <p className="text-white font-medium">{selectedFile.name}</p>
-              <p className="text-muted text-sm">{(selectedFile.size / 1024).toFixed(1)} KB</p>
+              <p className="text-sp-text text-sm">{(selectedFile.size / 1024).toFixed(1)} KB</p>
             </div>
           ) : (
             <div>
               <p className="text-white font-medium">Drop your .eml file here</p>
-              <p className="text-muted text-sm">or click to browse</p>
+              <p className="text-sp-text text-sm">or click to browse</p>
             </div>
           )}
         </div>
@@ -84,7 +84,7 @@ function FileUpload({ onUpload, isLoading }) {
         <button
           onClick={handleSubmit}
           disabled={isLoading}
-          className="w-full bg-accent hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-sp-red hover:bg-sp-red-hover disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>
