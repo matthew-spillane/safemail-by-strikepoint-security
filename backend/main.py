@@ -1,6 +1,6 @@
 import os
 import uuid
-from fastapi import FastAPI, UploadFile, File, Request, Response
+from fastapi import FastAPI, UploadFile, File, Request, Response, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -13,9 +13,20 @@ app = FastAPI(title="SafeMail API", version="1.0.0")
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
+allowed_origins = [
+    FRONTEND_URL,
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
+
+# Allow all Vercel preview/production URLs for this project
+VERCEL_URL = os.getenv("VERCEL_URL", "")
+if VERCEL_URL and VERCEL_URL not in allowed_origins:
+    allowed_origins.append(VERCEL_URL)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL, "http://localhost:5173", "http://localhost:3000"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -52,7 +63,7 @@ def health():
 @app.post("/api/analyze")
 async def analyze(request: Request, response: Response, file: UploadFile = File(...)):
     if not file.filename or not file.filename.lower().endswith(".eml"):
-        return {"error": "Please upload a .eml file"}, 400
+        raise HTTPException(status_code=400, detail="Please upload a .eml file")
 
     session_id = get_session_id(request, response)
     contents = await file.read()
@@ -100,7 +111,7 @@ def get_result(analysis_id: str, request: Request, response: Response):
     for r in results:
         if r["id"] == analysis_id:
             return r
-    return {"error": "Result not found"}, 404
+    raise HTTPException(status_code=404, detail="Result not found")
 
 
 def calculate_risk_score(analysis: dict) -> int:
