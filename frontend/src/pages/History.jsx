@@ -8,9 +8,7 @@ function History({ apiUrl }) {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const res = await fetch(`${apiUrl}/api/history`, {
-          credentials: 'include',
-        })
+        const res = await fetch(`${apiUrl}/api/history`)
         if (res.ok) {
           const data = await res.json()
           setItems(data)

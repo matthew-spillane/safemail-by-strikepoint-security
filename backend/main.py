@@ -1,6 +1,6 @@
 import os
 import uuid
-from fastapi import FastAPI, UploadFile, File, Request, Response, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -11,48 +11,15 @@ load_dotenv()
 
 app = FastAPI(title="SafeMail API", version="1.0.0")
 
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
-
-allowed_origins = [
-    FRONTEND_URL,
-    "http://localhost:5173",
-    "http://localhost:3000",
-]
-
-# Allow all Vercel preview/production URLs for this project
-VERCEL_URL = os.getenv("VERCEL_URL", "")
-if VERCEL_URL and VERCEL_URL not in allowed_origins:
-    allowed_origins.append(VERCEL_URL)
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
-    allow_credentials=True,
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# In-memory session store: session_id -> list of analysis results
-sessions: dict[str, list[dict]] = {}
-
-SESSION_COOKIE = "safemail_session"
-
-
-def get_session_id(request: Request, response: Response) -> str:
-    session_id = request.cookies.get(SESSION_COOKIE)
-    if not session_id:
-        session_id = str(uuid.uuid4())
-        response.set_cookie(
-            key=SESSION_COOKIE,
-            value=session_id,
-            httponly=True,
-            samesite="none",
-            secure=True,
-            max_age=60 * 60 * 24 * 7,
-        )
-    if session_id not in sessions:
-        sessions[session_id] = []
-    return session_id
+# In-memory store: result_id -> analysis result
+results_store: dict[str, dict] = {}
 
 
 @app.get("/api/health")
@@ -61,11 +28,10 @@ def health():
 
 
 @app.post("/api/analyze")
-async def analyze(request: Request, response: Response, file: UploadFile = File(...)):
+async def analyze(file: UploadFile = File(...)):
     if not file.filename or not file.filename.lower().endswith(".eml"):
         raise HTTPException(status_code=400, detail="Please upload a .eml file")
 
-    session_id = get_session_id(request, response)
     contents = await file.read()
     eml_text = contents.decode("utf-8", errors="replace")
 
@@ -78,20 +44,19 @@ async def analyze(request: Request, response: Response, file: UploadFile = File(
     analysis["risk_score"] = risk_score
     analysis["risk_verdict"] = get_risk_verdict(risk_score)
 
-    analysis["id"] = str(uuid.uuid4())
+    result_id = str(uuid.uuid4())
+    analysis["id"] = result_id
     analysis["filename"] = file.filename
 
-    sessions[session_id].append(analysis)
+    results_store[result_id] = analysis
 
     return analysis
 
 
 @app.get("/api/history")
-def history(request: Request, response: Response):
-    session_id = get_session_id(request, response)
-    results = sessions.get(session_id, [])
+def history():
     summaries = []
-    for r in reversed(results):
+    for r in reversed(list(results_store.values())):
         summaries.append({
             "id": r["id"],
             "filename": r["filename"],
@@ -105,13 +70,11 @@ def history(request: Request, response: Response):
 
 
 @app.get("/api/results/{analysis_id}")
-def get_result(analysis_id: str, request: Request, response: Response):
-    session_id = get_session_id(request, response)
-    results = sessions.get(session_id, [])
-    for r in results:
-        if r["id"] == analysis_id:
-            return r
-    raise HTTPException(status_code=404, detail="Result not found")
+def get_result(analysis_id: str):
+    result = results_store.get(analysis_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="Result not found")
+    return result
 
 
 def calculate_risk_score(analysis: dict) -> int:

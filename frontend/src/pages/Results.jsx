@@ -15,9 +15,7 @@ function Results({ apiUrl }) {
   useEffect(() => {
     const fetchResult = async () => {
       try {
-        const res = await fetch(`${apiUrl}/api/results/${id}`, {
-          credentials: 'include',
-        })
+        const res = await fetch(`${apiUrl}/api/results/${id}`)
         if (!res.ok) throw new Error('Result not found')
         const data = await res.json()
         if (data.error) throw new Error(data.error)

@@ -18,7 +18,6 @@ function Home({ apiUrl }) {
       const res = await fetch(`${apiUrl}/api/analyze`, {
         method: 'POST',
         body: formData,
-        credentials: 'include',
       })
 
       if (!res.ok) {
