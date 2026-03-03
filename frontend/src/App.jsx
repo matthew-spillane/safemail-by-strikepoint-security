@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="min-h-screen sp-hero-bg text-sp-text">
       <Navbar />
-      <main className="max-w-5xl mx-auto px-4 pb-16">
+      <main className="max-w-5xl mx-auto px-4 pt-12 pb-16">
         <Routes>
           <Route path="/" element={<Home apiUrl={API_URL} />} />
           <Route path="/results/:id" element={<Results apiUrl={API_URL} />} />

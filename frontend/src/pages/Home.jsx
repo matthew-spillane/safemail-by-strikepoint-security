@@ -40,7 +40,12 @@ function Home({ apiUrl }) {
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
-      <div className="text-center space-y-3">
+      <div className="text-center space-y-4">
+        <div className="mx-auto w-14 h-14 rounded-2xl bg-sp-red/10 border border-sp-red/20 flex items-center justify-center">
+          <svg className="w-7 h-7 text-sp-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
         <h1 className="text-3xl font-bold text-white">Analyze an Email</h1>
         <p className="text-sp-text">
           Upload a <code className="text-white bg-sp-card px-1.5 py-0.5 rounded text-sm">.eml</code> file to check for phishing indicators, authentication issues, and suspicious content.
