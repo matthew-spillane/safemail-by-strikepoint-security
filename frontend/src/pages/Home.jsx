@@ -11,13 +11,13 @@ function Home({ apiUrl }) {
     setIsLoading(true)
     setError(null)
 
-    const formData = new FormData()
-    formData.append('file', file)
-
     try {
+      const rawEmail = await file.text()
+
       const res = await fetch(`${apiUrl}/safemail/scan`, {
         method: 'POST',
-        body: formData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ raw_email: rawEmail }),
       })
 
       if (!res.ok) {
