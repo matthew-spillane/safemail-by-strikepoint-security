@@ -30,7 +30,7 @@ function Home({ apiUrl }) {
         throw new Error(data.error)
       }
 
-      navigate(`/results/${data.id}`)
+      navigate('/results', { state: { result: data } })
     } catch (err) {
       setError(err.message || 'Failed to analyze email. Please try again.')
     } finally {

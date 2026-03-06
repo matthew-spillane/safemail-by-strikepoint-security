@@ -1,49 +1,20 @@
-import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useState } from 'react'
+import { useLocation, Link } from 'react-router-dom'
 import AIVerdictCard from '../components/AIVerdictCard'
 import RiskGauge from '../components/RiskGauge'
 import SummaryBar from '../components/SummaryBar'
 import CheckCard from '../components/CheckCard'
 
-function Results({ apiUrl }) {
-  const { id } = useParams()
-  const [result, setResult] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+function Results() {
+  const location = useLocation()
+  const result = location.state?.result || null
+  const error = result ? null : 'Result not found'
   const [copied, setCopied] = useState(false)
-
-  useEffect(() => {
-    const fetchResult = async () => {
-      try {
-        const res = await fetch(`${apiUrl}/api/results/${id}`)
-        if (!res.ok) throw new Error('Result not found')
-        const data = await res.json()
-        if (data.error) throw new Error(data.error)
-        setResult(data)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchResult()
-  }, [id, apiUrl])
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-  }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <svg className="animate-spin h-8 w-8 text-sp-red" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-        </svg>
-      </div>
-    )
   }
 
   if (error) {

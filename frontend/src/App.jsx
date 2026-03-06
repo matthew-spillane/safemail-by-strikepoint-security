@@ -13,7 +13,7 @@ function App() {
       <main className="max-w-5xl mx-auto px-4 pt-12 pb-16">
         <Routes>
           <Route path="/" element={<Home apiUrl={API_URL} />} />
-          <Route path="/results/:id" element={<Results apiUrl={API_URL} />} />
+          <Route path="/results" element={<Results />} />
           <Route path="/history" element={<History apiUrl={API_URL} />} />
         </Routes>
       </main>
