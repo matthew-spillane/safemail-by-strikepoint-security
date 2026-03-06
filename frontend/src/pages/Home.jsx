@@ -15,7 +15,7 @@ function Home({ apiUrl }) {
     formData.append('file', file)
 
     try {
-      const res = await fetch(`${apiUrl}/api/analyze`, {
+      const res = await fetch(`${apiUrl}/safemail/scan`, {
         method: 'POST',
         body: formData,
       })
